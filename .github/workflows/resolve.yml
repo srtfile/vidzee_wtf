@@ -1,0 +1,26 @@
+name: Resolve Vidzee Streams
+
+on:
+  workflow_dispatch:
+    inputs:
+      url:
+        description: "Embed URL (e.g. https://player.vidzee.wtf/embed/movie/254)"
+        required: true
+        default: "https://player.vidzee.wtf/embed/movie/254"
+
+jobs:
+  resolve:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install requests pycryptodome cryptography
+
+      - name: Resolve streams
+        run: python vidzee_resolver.py "${{ github.event.inputs.url }}"
